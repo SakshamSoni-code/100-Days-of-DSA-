@@ -1,0 +1,98 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define fast ios::sync_with_stdio(0); cin.tie(0)
+#define ll long long
+const ll mod = 1000000007; //10^9+7
+
+#ifdef ONLINE_JUDGE
+#define debug(...) void(0);
+#else
+#include "debug.hpp"
+#endif
+
+void heySaksham() {
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+	freopen("error.txt", "w", stderr);
+#endif
+}
+
+void cyclicShiftLeft(vector<int> &v , int l , int r , int d) {
+	/*reverse(v.begin() + l , v.begin() + (d - 1));
+	for (int i = 0; i < v.size(); i++) cout << v[i] << " ";
+	cout << endl;
+
+	reverse(v.begin() + d , v.begin() + r);
+	reverse(v.begin() + l , v.begin() + r); */
+
+	for (int i = 0; i < d; i++)
+	{
+		int temp = v[l];
+		for (int j = l + 1; j <= r; j++) v[j - 1] = v[j];
+		v[r] = temp;
+	}
+}
+void problem_solver()
+{
+	int n;
+	cin >> n;
+
+	vector<int> v(n);
+	for (int i = 0; i < n; i++) cin >> v[i];
+
+	vector<int> temp;
+	temp = v;
+	sort(temp.begin(), temp.end());
+	int actions = 0;
+
+
+	vector<pair<int, pair<int, int>>> ans;
+
+	for (int i = 0; i < n; i++)
+	{
+		if (v[i] != temp[i]) {
+			actions++;
+			int l = i , len = 1;
+			for (int j = i + 1; j < n; j++)
+			{
+				len++;
+				if (v[j] == temp[i]) {
+					int r = j;
+					cyclicShiftLeft(v, l, r, len - 1);
+					ans.push_back({l + 1, {r + 1, len - 1}});
+					break;
+
+				}
+			}
+
+		}
+
+	}
+
+	if (actions == 0) {
+		cout << 0;
+		return;
+	}
+
+	cout << actions << endl;
+
+	for (int i = 0; i < ans.size(); i++)
+	{
+		cout << ans[i].first << " " << ans[i].second.first << " " << ans[i].second.second << endl;
+	}
+}
+
+int32_t main() {
+	heySaksham();
+	fast;
+	ll t = 1;
+	cin >> t;
+	while (t--)
+	{
+		problem_solver();
+		cout << endl;
+	}
+
+	return 0;
+}
